@@ -18,7 +18,9 @@ export async function Footer() {
       <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
         <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
           <ThemeSelector />
-          
+          <nav className="flex flex-col md:flex-row gap-4">
+            
+          </nav>
         </div>
       </div>
     </footer>
