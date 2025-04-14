@@ -19,10 +19,16 @@ export async function Footer() {
         <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
           <ThemeSelector />
           <nav className="flex flex-col md:flex-row gap-4">
-            
+            <a href="/about" className="hover:underline">About</a>
+            <a href="/contact" className="hover:underline">Contact</a>
+            <a href="/privacy" className="hover:underline">Privacy Policy</a>
           </nav>
         </div>
+        <p className="text-sm text-muted-foreground">
+          © {new Date().getFullYear()} sanjidaivy.com. All rights reserved.
+        </p>
       </div>
     </footer>
+
   )
 }
