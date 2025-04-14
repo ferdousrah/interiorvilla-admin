@@ -21,7 +21,7 @@ export async function Footer() {
           <nav className="flex flex-col md:flex-row gap-4">
             <a href="/about" className="hover:underline">About</a>
             <a href="/contact" className="hover:underline">Contact</a>
-            <a href="/privacy" className="hover:underline">Privacy Policy</a>
+            <a href="/privacy" className="hover:underline">Data Policy</a>
           </nav>
         </div>
         <p className="text-sm text-muted-foreground">
