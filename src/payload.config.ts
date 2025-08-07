@@ -1,4 +1,5 @@
 // storage-adapter-import-placeholder
+import 'dotenv/config'
 import { postgresAdapter } from '@payloadcms/db-postgres'
 
 import sharp from 'sharp' // sharp-import
