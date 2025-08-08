@@ -17,6 +17,20 @@ import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 
+import Projects from './collections/Projects'
+import ProjectCategories from './collections/ProjectCategories'
+import Services from './collections/Services'
+import Testimonials from './collections/Testimonials'
+import TeamMembers from './collections/TeamMembers'
+import BlogPosts from './collections/BlogPosts'
+import BlogCategories from './collections/BlogCategories'
+import Offices from './collections/Offices'
+
+import Home from './globals/Home'
+import About from './globals/About'
+import Portfolio from './globals/Portfolio'
+import Contact from './globals/Contact'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -24,10 +38,10 @@ export default buildConfig({
   admin: {
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
+      // Feel free to delete this at any time. Simply remove the line below.
       beforeLogin: ['@/components/BeforeLogin'],
       // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
+      // Feel free to delete this at any time. Simply remove the line below.
       beforeDashboard: ['@/components/BeforeDashboard'],
     },
     importMap: {
@@ -64,9 +78,23 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    Pages,
+    Posts,
+    Media,
+    Categories,
+    Users,
+    Projects,
+    ProjectCategories,
+    Services,
+    Testimonials,
+    TeamMembers,
+    BlogPosts,
+    BlogCategories,
+    Offices,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, Home, About, Portfolio, Contact],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder
