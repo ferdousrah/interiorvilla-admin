@@ -21,6 +21,8 @@ export const Media: CollectionConfig = {
     create: authenticated,
     delete: authenticated,
     read: () => true, // Temporarily allow all read access
+    // Update access can be restricted later if needed
+    // update: authenticated,
     update: authenticated,
   },
   fields: [
