@@ -1,4 +1,3 @@
-// src/collections/TeamMembers.ts
 import type { CollectionConfig, PayloadRequest } from 'payload'
 
 function baseUrlFromReq(req: PayloadRequest): string {
@@ -6,12 +5,13 @@ function baseUrlFromReq(req: PayloadRequest): string {
   const cfg = req?.payload?.config
   if (cfg?.serverURL) return cfg.serverURL.replace(/\/$/, '')
 
-  // 2) Fall back to headers (works behind proxies)
-  const host = (req?.headers?.host as string) || ''
+  // 2) Fall back to request headers
+  const host = req?.headers?.get('host') || ''
   const proto =
-    ((req?.headers?.['x-forwarded-proto'] as string) || '').split(',')[0].trim() ||
+    (req?.headers?.get('x-forwarded-proto') || '').split(',')[0].trim() ||
     (req as any).protocol ||
     'https'
+
   return host ? `${proto}://${host}` : ''
 }
 
