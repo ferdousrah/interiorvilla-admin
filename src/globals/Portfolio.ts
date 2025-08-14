@@ -2,6 +2,7 @@ import { GlobalConfig } from 'payload'
 
 const Portfolio: GlobalConfig = {
   slug: 'portfolio',
+  access: { read: () => true },
   fields: [
     {
       name: 'hero',

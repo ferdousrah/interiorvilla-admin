@@ -2,6 +2,7 @@ import { CollectionConfig } from 'payload'
 
 const Testimonials: CollectionConfig = {
   slug: 'testimonials',
+  access: { read: () => true },
   admin: {
     useAsTitle: 'title',
   },

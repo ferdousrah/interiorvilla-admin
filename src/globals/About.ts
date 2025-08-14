@@ -2,6 +2,7 @@ import { GlobalConfig } from 'payload'
 
 const About: GlobalConfig = {
   slug: 'about',
+  access: { read: () => true },
   fields: [
     {
       name: 'hero',

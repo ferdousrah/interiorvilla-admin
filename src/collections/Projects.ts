@@ -2,6 +2,7 @@ import { CollectionConfig } from 'payload'
 
 const Projects: CollectionConfig = {
   slug: 'projects',
+  access: { read: () => true },
   admin: {
     useAsTitle: 'title', // 👈 this tells Payload to show the title in dropdowns
   },
