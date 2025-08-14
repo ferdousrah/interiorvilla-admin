@@ -37,6 +37,8 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL, // e.g. https://cms.interiorvillabd.com
   defaultDepth: 1, // relationships (like photo) populate by default in API
+  cors: ['http://localhost:3000', 'https://interiorvillabd.com'],
+  csrf: ['http://localhost:3000', 'https://interiorvillabd.com'],
   admin: {
     components: {
       // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
