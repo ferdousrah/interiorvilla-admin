@@ -7,10 +7,8 @@ function baseUrlFromReq(req: PayloadRequest): string {
 
   // 2) Fall back to request headers
   const host = req?.headers?.get('host') || ''
-  const proto =
-    (req?.headers?.get('x-forwarded-proto') || '').split(',')[0].trim() ||
-    (req as any).protocol ||
-    'https'
+  const protoHeader = req?.headers?.get('x-forwarded-proto') || ''
+  const proto = protoHeader.split(',')[0]?.trim() || (req as any)?.protocol || 'https'
 
   return host ? `${proto}://${host}` : ''
 }
