@@ -1,29 +1,30 @@
-// Media.ts
 import type { CollectionConfig } from 'payload'
-
 import {
   FixedToolbarFeature,
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+
 import path from 'path'
-import { fileURLToPath } from 'url'
+import fs from 'fs/promises'
+import sharp from 'sharp'
 
-import { anyone } from '../access/anyone'
-import { authenticated } from '../access/authenticated'
-
-const filename = fileURLToPath(import.meta.url)
-const dirname = path.dirname(filename)
+// If your uploads live elsewhere, change this:
+const UPLOAD_DIR = path.join(process.cwd(), 'media') // ← adjust if needed
+const PUBLIC_URL_PREFIX = '/media' // Payload serves uploads here
 
 export const Media: CollectionConfig = {
   slug: 'media',
+  upload: true, // keep simple, rely on project defaults
+  // 👇 Access rules
   access: {
-    create: authenticated,
-    delete: authenticated,
-    read: () => true, // Temporarily allow all read access
-    // Update access can be restricted later if needed
-    // update: authenticated,
-    update: authenticated,
+    // Anyone (no login) can read media + hit file endpoints
+    read: () => true,
+
+    // Only logged-in users can create/update/delete
+    create: ({ req }) => !!req.user,
+    update: ({ req }) => !!req.user,
+    delete: ({ req }) => !!req.user,
   },
   fields: [
     {
@@ -41,42 +42,80 @@ export const Media: CollectionConfig = {
       }),
     },
   ],
-  upload: {
-    // Upload to the public/media directory in Next.js making them publicly accessible even outside of Payload
-    staticDir: path.resolve(dirname, '../../public/media'),
-    adminThumbnail: 'thumbnail',
-    focalPoint: true,
-    imageSizes: [
-      {
-        name: 'thumbnail',
-        width: 300,
+
+  hooks: {
+    // Generate/refresh WebP whenever the original changes
+    afterChange: [
+      async ({ req, doc /*, operation*/ }) => {
+        try {
+          const mime: string = (doc as any)?.mimeType ?? ''
+          if (!mime.startsWith('image/')) return doc
+
+          const filename: string | undefined = (doc as any)?.filename
+          if (!filename) return doc
+
+          const originalAbs = path.join(UPLOAD_DIR, filename)
+          const webpFilename = filename.replace(/\.[^.]+$/, '') + '.webp'
+          const webpAbs = path.join(UPLOAD_DIR, webpFilename)
+
+          // Create WebP alongside original
+          const img = sharp(originalAbs)
+          const meta = await img.metadata()
+          await img.toFormat('webp', { quality: 82 }).toFile(webpAbs)
+          await fs.access(webpAbs)
+
+          const sizes = (doc as any).sizes || {}
+          sizes.webp = {
+            filename: webpFilename,
+            url: `${PUBLIC_URL_PREFIX}/${webpFilename}`,
+            width: meta.width ?? undefined,
+            height: meta.height ?? undefined,
+            mimeType: 'image/webp',
+          }
+
+          const updated = await req.payload.update({
+            collection: 'media',
+            id: (doc as any).id,
+            data: { sizes },
+            overrideAccess: true,
+            depth: 0,
+            draft: false,
+            // @ts-expect-error – supported at runtime to avoid loop
+            disableHooks: true,
+          })
+
+          return updated
+        } catch (e) {
+          req.payload.logger?.warn?.(`WebP hook skipped: ${(e as Error).message}`)
+          return doc
+        }
       },
-      {
-        name: 'square',
-        width: 500,
-        height: 500,
-      },
-      {
-        name: 'small',
-        width: 600,
-      },
-      {
-        name: 'medium',
-        width: 900,
-      },
-      {
-        name: 'large',
-        width: 1400,
-      },
-      {
-        name: 'xlarge',
-        width: 1920,
-      },
-      {
-        name: 'og',
-        width: 1200,
-        height: 630,
-        crop: 'center',
+    ],
+
+    // Add ?v=updatedAt and expose webpUrl (relative) for easy use via your Nginx proxy
+    afterRead: [
+      ({ doc }) => {
+        try {
+          const base = process.env.PAYLOAD_PUBLIC_SERVER_URL || ''
+          if ((doc as any)?.url && (doc as any)?.updatedAt) {
+            const u = new URL((doc as any).url as string, base)
+            u.searchParams.set('v', String(new Date((doc as any).updatedAt as string).getTime()))
+            ;(doc as any).url = u.pathname + u.search // keep relative
+          }
+
+          const sizes = (doc as any)?.sizes
+          const wurl: string | undefined = sizes?.webp?.url
+          if (wurl) {
+            const baseUrl = new URL((doc as any).url, base)
+            const v = baseUrl.searchParams.get('v') || undefined
+            const wu = new URL(wurl, base)
+            if (v) wu.searchParams.set('v', v)
+            ;(doc as any).webpUrl = wu.pathname + wu.search
+          }
+        } catch {
+          /* ignore */
+        }
+        return doc
       },
     ],
   },
