@@ -2,6 +2,7 @@ import { GlobalConfig } from 'payload'
 
 const Home: GlobalConfig = {
   slug: 'home',
+  access: { read: () => true },
   fields: [
     {
       name: 'featuredWorks',
@@ -32,7 +33,10 @@ const Home: GlobalConfig = {
         {
           name: 'highlights',
           type: 'array',
-          fields: [{ name: 'text', type: 'text' }],
+          fields: [
+            { name: 'text', type: 'text' },
+            { name: 'desc', type: 'text' },
+          ],
         },
         { name: 'backgroundColor', type: 'text' },
       ],

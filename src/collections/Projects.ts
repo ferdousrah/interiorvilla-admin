@@ -1,7 +1,10 @@
-import { CollectionConfig } from 'payload';
+import { CollectionConfig } from 'payload'
 
 const Projects: CollectionConfig = {
   slug: 'projects',
+  admin: {
+    useAsTitle: 'title', // 👈 this tells Payload to show the title in dropdowns
+  },
   fields: [
     { name: 'title', type: 'text', required: true },
     { name: 'category', type: 'relationship', relationTo: 'project-categories' },
@@ -10,21 +13,27 @@ const Projects: CollectionConfig = {
     {
       name: 'beforeAfterImages',
       type: 'array',
-      fields: [
-        { name: 'image', type: 'upload', relationTo: 'media' },
-      ],
+      fields: [{ name: 'image', type: 'upload', relationTo: 'media' }],
     },
     { name: 'details', type: 'richText' },
     {
       name: 'gallery',
       type: 'group',
       fields: [
-        { name: 'photos', type: 'array', fields: [{ name: 'image', type: 'upload', relationTo: 'media' }] },
+        {
+          name: 'photos',
+          type: 'array',
+          fields: [{ name: 'image', type: 'upload', relationTo: 'media' }],
+        },
         { name: 'videos', type: 'array', fields: [{ name: 'videoUrl', type: 'text' }] },
-        { name: 'plans', type: 'array', fields: [{ name: 'image', type: 'upload', relationTo: 'media' }] },
+        {
+          name: 'plans',
+          type: 'array',
+          fields: [{ name: 'image', type: 'upload', relationTo: 'media' }],
+        },
       ],
     },
   ],
-};
+}
 
-export default Projects;
+export default Projects

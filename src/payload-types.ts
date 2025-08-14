@@ -2035,6 +2035,7 @@ export interface Home {
     highlights?:
       | {
           text?: string | null;
+          desc?: string | null;
           id?: string | null;
         }[]
       | null;
@@ -2249,6 +2250,7 @@ export interface HomeSelect<T extends boolean = true> {
           | T
           | {
               text?: T;
+              desc?: T;
               id?: T;
             };
         backgroundColor?: T;
