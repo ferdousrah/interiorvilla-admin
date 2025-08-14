@@ -1,20 +1,16 @@
+// src/collections/TeamMembers.ts
 import type { CollectionConfig, PayloadRequest } from 'payload'
 
-interface ProtocolRequest extends PayloadRequest {
-  protocol?: string
-}
+function absoluteFromReq(req: PayloadRequest, path: string): string {
+  // 1) Prefer serverURL if configured (recommended)
+  const serverURL = req?.payload?.config?.serverURL
+  if (serverURL) return new URL(path, serverURL.replace(/\/$/, '') + '/').toString()
 
-function baseUrlFromReq(req: ProtocolRequest): string {
-  // 1) Prefer serverURL from payload config if set
-  const cfg = req?.payload?.config
-  if (cfg?.serverURL) return cfg.serverURL.replace(/\/$/, '')
-
-  // 2) Fall back to request headers
+  // 2) Fall back to headers (proxy-safe)
   const host = req?.headers?.get('host') || ''
-  const protoHeader = req?.headers?.get('x-forwarded-proto') || ''
-  const proto = protoHeader.split(',')[0]?.trim() || req.protocol || 'https'
-
-  return host ? `${proto}://${host}` : ''
+  const protoHeader = req?.headers?.get('x-forwarded-proto') || '' // e.g., "https" or "http,https"
+  const proto = protoHeader.split(',')[0]?.trim() || 'https'
+  return host ? new URL(path, `${proto}://${host}`).toString() : path
 }
 
 const TeamMembers: CollectionConfig = {
@@ -32,8 +28,7 @@ const TeamMembers: CollectionConfig = {
     afterRead: [
       ({ doc, req }) => {
         if (doc?.photo?.url) {
-          const base = baseUrlFromReq(req as ProtocolRequest)
-          doc.photoUrl = `${base}${doc.photo.url}`
+          doc.photoUrl = absoluteFromReq(req, doc.photo.url)
         }
         return doc
       },
