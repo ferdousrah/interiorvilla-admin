@@ -35,7 +35,6 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  cors: ['*'], // Allow all origins for development; adjust in production
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL, // e.g. https://cms.interiorvillabd.com
   defaultDepth: 1, // relationships (like photo) populate by default in API
   admin: {
@@ -96,7 +95,7 @@ export default buildConfig({
     BlogCategories,
     Offices,
   ],
-  cors: [getServerSideURL()].filter(Boolean),
+  cors: ['*'],
   globals: [Header, Footer, Home, About, Portfolio, Contact],
   plugins: [
     ...plugins,
