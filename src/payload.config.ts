@@ -95,7 +95,11 @@ export default buildConfig({
     BlogCategories,
     Offices,
   ],
-  cors: ['*'],
+  cors: [
+    'http://localhost:3000', // dev
+    'https://interiorvillabd.com', // your production site (adjust)
+  ],
+  csrf: ['http://localhost:3000', 'https://interiorvillabd.com'],
   globals: [Header, Footer, Home, About, Portfolio, Contact],
   plugins: [
     ...plugins,
