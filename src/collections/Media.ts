@@ -28,18 +28,16 @@ export const Media: CollectionConfig = {
   },
   fields: [
     {
-      name: 'alt',
-      type: 'text',
-      //required: true,
-    },
-    {
       name: 'caption',
       type: 'richText',
       editor: lexicalEditor({
-        features: ({ rootFeatures }) => {
-          return [...rootFeatures, FixedToolbarFeature(), InlineToolbarFeature()]
-        },
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+        ],
       }),
+      required: false,
     },
   ],
 
