@@ -886,6 +886,7 @@ export interface TeamMember {
   designation?: string | null;
   licenseNumber?: string | null;
   photo?: (number | null) | Media;
+  photoUrl?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1650,6 +1651,7 @@ export interface TeamMembersSelect<T extends boolean = true> {
   designation?: T;
   licenseNumber?: T;
   photo?: T;
+  photoUrl?: T;
   updatedAt?: T;
   createdAt?: T;
 }
