@@ -1,16 +1,15 @@
 // src/collections/TeamMembers.ts
 import type { CollectionConfig, PayloadRequest } from 'payload'
 
-function absoluteFromReq(req: PayloadRequest, path: string): string {
-  // 1) Prefer serverURL if configured (recommended)
-  const serverURL = req?.payload?.config?.serverURL
-  if (serverURL) return new URL(path, serverURL.replace(/\/$/, '') + '/').toString()
+function absoluteFromReq(req: PayloadRequest, relPath: string): string {
+  // Prefer serverURL if set (recommended)
+  const serverURL = req?.payload?.config?.serverURL?.replace(/\/$/, '')
+  if (serverURL) return `${serverURL}${relPath}`
 
-  // 2) Fall back to headers (proxy-safe)
+  // Fall back to headers
   const host = req?.headers?.get('host') || ''
-  const protoHeader = req?.headers?.get('x-forwarded-proto') || '' // e.g., "https" or "http,https"
-  const proto = protoHeader.split(',')[0]?.trim() || 'https'
-  return host ? new URL(path, `${proto}://${host}`).toString() : path
+  const proto = (req?.headers?.get('x-forwarded-proto') || '').split(',')[0]?.trim() || 'https'
+  return host ? `${proto}://${host}${relPath}` : relPath
 }
 
 const TeamMembers: CollectionConfig = {
@@ -26,9 +25,26 @@ const TeamMembers: CollectionConfig = {
   ],
   hooks: {
     afterRead: [
-      ({ doc, req }) => {
-        if (doc?.photo?.url) {
-          doc.photoUrl = absoluteFromReq(req, doc.photo.url)
+      async ({ doc, req }) => {
+        // depth>=1 case: photo is an object
+        if (doc?.photo && typeof doc.photo === 'object' && (doc.photo as any).url) {
+          doc.photoUrl = absoluteFromReq(req, (doc.photo as any).url)
+          return doc
+        }
+        // depth=0 case: photo is an ID → look up media
+        if (doc?.photo && (typeof doc.photo === 'string' || typeof doc.photo === 'number')) {
+          try {
+            const media = await req.payload.findByID({
+              collection: 'media',
+              id: doc.photo,
+              depth: 0,
+            })
+            if (media?.url) doc.photoUrl = absoluteFromReq(req, media.url as string)
+            // If your adapter doesn’t set .url, you can fallback to filename:
+            // else if (media?.filename) doc.photoUrl = absoluteFromReq(req, `/media/${media.filename}`)
+          } catch {
+            /* ignore */
+          }
         }
         return doc
       },
