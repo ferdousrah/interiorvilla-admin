@@ -15,32 +15,7 @@ const PUBLIC_URL_PREFIX = '/media' // Payload serves uploads here
 
 export const Media: CollectionConfig = {
   slug: 'media',
-  upload: {
-    imageSizes: [
-      { name: 'thumbnail', width: 300, withoutEnlargement: true },
-      {
-        name: 'square',
-        width: 500,
-        height: 500,
-        fit: 'cover',
-        position: 'center',
-        withoutEnlargement: true,
-      },
-      { name: 'small', width: 600, withoutEnlargement: true },
-      { name: 'medium', width: 900, withoutEnlargement: true },
-      { name: 'large', width: 1400, withoutEnlargement: true },
-      { name: 'xlarge', width: 1920, withoutEnlargement: true },
-      {
-        name: 'og',
-        width: 1200,
-        height: 630,
-        fit: 'cover',
-        position: 'center',
-        withoutEnlargement: true,
-      },
-    ],
-  },
-  //upload: true, // keep simple, rely on project defaults
+  upload: true, // keep simple, rely on project defaults
   // 👇 Access rules
   access: {
     // Anyone (no login) can read media + hit file endpoints
@@ -52,11 +27,6 @@ export const Media: CollectionConfig = {
     delete: ({ req }) => !!req.user,
   },
   fields: [
-    {
-      name: 'alt',
-      type: 'text',
-      //required: true,
-    },
     {
       name: 'caption',
       type: 'richText',
