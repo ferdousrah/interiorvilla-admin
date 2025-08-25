@@ -40,6 +40,7 @@ export const Media: CollectionConfig = {
       },
     ],
   },
+
   //upload: true, // keep simple, rely on project defaults
   // 👇 Access rules
   access: {
@@ -55,7 +56,10 @@ export const Media: CollectionConfig = {
     {
       name: 'alt',
       type: 'text',
-      //required: true,
+      required: true,
+      localized: false,
+      admin: { description: 'Short, descriptive alt text for accessibility & SEO' },
+      validate: (val) => (val && val.trim().length > 0 ? true : 'Alt text is required'),
     },
     {
       name: 'caption',
