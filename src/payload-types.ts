@@ -768,6 +768,10 @@ export interface Project {
   location?: string | null;
   client?: string | null;
   featuredImage?: (number | null) | Media;
+  /**
+   * Check if this project should appear on the homepage
+   */
+  featuredOnHome?: boolean | null;
   beforeAfterImages?:
     | {
         image?: (number | null) | Media;
@@ -1554,6 +1558,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   location?: T;
   client?: T;
   featuredImage?: T;
+  featuredOnHome?: T;
   beforeAfterImages?:
     | T
     | {

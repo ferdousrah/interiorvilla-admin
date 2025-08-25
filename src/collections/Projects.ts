@@ -15,6 +15,17 @@ const Projects: CollectionConfig = {
     { name: 'location', type: 'text' },
     { name: 'client', type: 'text' },
     { name: 'featuredImage', type: 'upload', relationTo: 'media' },
+    // 👇 New field: Featured on Home
+    {
+      name: 'featuredOnHome',
+      label: 'Featured on Home',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar', // optional: keeps it visible in the sidebar
+        description: 'Check if this project should appear on the homepage',
+      },
+    },
     {
       name: 'beforeAfterImages',
       type: 'array',
