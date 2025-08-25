@@ -287,7 +287,7 @@ export interface Media {
   /**
    * Short, descriptive alt text for accessibility & SEO
    */
-  alt: string;
+  alt?: string | null;
   caption?: {
     root: {
       type: string;
@@ -763,6 +763,10 @@ export interface Project {
   title: string;
   category?: (number | null) | ProjectCategory;
   shortDescription?: string | null;
+  year?: string | null;
+  size?: string | null;
+  location?: string | null;
+  client?: string | null;
   featuredImage?: (number | null) | Media;
   beforeAfterImages?:
     | {
@@ -1545,6 +1549,10 @@ export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
   category?: T;
   shortDescription?: T;
+  year?: T;
+  size?: T;
+  location?: T;
+  client?: T;
   featuredImage?: T;
   beforeAfterImages?:
     | T

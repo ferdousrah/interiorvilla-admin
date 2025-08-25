@@ -10,6 +10,10 @@ const Projects: CollectionConfig = {
     { name: 'title', type: 'text', required: true },
     { name: 'category', type: 'relationship', relationTo: 'project-categories' },
     { name: 'shortDescription', type: 'textarea' },
+    { name: 'year', type: 'text' },
+    { name: 'size', type: 'text' },
+    { name: 'location', type: 'text' },
+    { name: 'client', type: 'text' },
     { name: 'featuredImage', type: 'upload', relationTo: 'media' },
     {
       name: 'beforeAfterImages',
