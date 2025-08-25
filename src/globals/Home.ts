@@ -10,12 +10,6 @@ const Home: GlobalConfig = {
       fields: [
         { name: 'sectionTitle', type: 'text' },
         { name: 'sectionDescription', type: 'textarea' },
-        {
-          name: 'projects',
-          type: 'relationship',
-          relationTo: 'projects',
-          hasMany: true,
-        },
         { name: 'backgroundColor', type: 'text' },
       ],
     },

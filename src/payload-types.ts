@@ -2038,7 +2038,6 @@ export interface Home {
   featuredWorks?: {
     sectionTitle?: string | null;
     sectionDescription?: string | null;
-    projects?: (number | Project)[] | null;
     backgroundColor?: string | null;
   };
   aboutSection?: {
@@ -2250,7 +2249,6 @@ export interface HomeSelect<T extends boolean = true> {
     | {
         sectionTitle?: T;
         sectionDescription?: T;
-        projects?: T;
         backgroundColor?: T;
       };
   aboutSection?:
