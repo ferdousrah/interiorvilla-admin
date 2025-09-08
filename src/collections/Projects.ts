@@ -27,14 +27,6 @@ const Projects: CollectionConfig = {
       },
     },
     {
-      name: 'position',
-      type: 'text',
-      admin: {
-        description: 'Use for ordering projects on the homepage. Lower numbers appear first.',
-        position: 'sidebar',
-      },
-    },
-    {
       name: 'beforeAfterImages',
       type: 'array',
       fields: [{ name: 'image', type: 'upload', relationTo: 'media' }],
