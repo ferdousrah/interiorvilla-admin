@@ -772,6 +772,10 @@ export interface Project {
    * Check if this project should appear on the homepage
    */
   featuredOnHome?: boolean | null;
+  /**
+   * Use for ordering projects on the homepage. Lower numbers appear first.
+   */
+  position?: string | null;
   beforeAfterImages?:
     | {
         image?: (number | null) | Media;
@@ -1559,6 +1563,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   client?: T;
   featuredImage?: T;
   featuredOnHome?: T;
+  position?: T;
   beforeAfterImages?:
     | T
     | {
