@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import slugify from 'slugify'
 
 const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
@@ -17,6 +18,9 @@ const BlogPosts: CollectionConfig = {
       type: 'text',
       required: true,
       unique: true,
+      admin: {
+        readOnly: true, // prevents manual editing in admin panel
+      },
     },
     {
       name: 'featuredImage',
@@ -53,6 +57,16 @@ const BlogPosts: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data?.title) {
+          data.slug = slugify(data.title, { lower: true, strict: true })
+        }
+        return data
+      },
+    ],
+  },
 }
 
 export default BlogPosts
