@@ -1,5 +1,10 @@
 import { CollectionConfig } from 'payload'
 import slugify from 'slugify'
+import {
+  FixedToolbarFeature,
+  InlineToolbarFeature,
+  lexicalEditor,
+} from '@payloadcms/richtext-lexical'
 
 const BlogPosts: CollectionConfig = {
   slug: 'blog-posts',
@@ -34,6 +39,13 @@ const BlogPosts: CollectionConfig = {
     {
       name: 'fullContent',
       type: 'richText',
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          FixedToolbarFeature(),
+          InlineToolbarFeature(),
+        ],
+      }),
     },
     {
       name: 'category',
