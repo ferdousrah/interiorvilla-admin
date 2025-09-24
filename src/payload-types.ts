@@ -773,7 +773,7 @@ export interface Project {
   /**
    * Paste valid JSON for structured data
    */
-  metaStructuredData?: string | null;
+  seoStructuredData?: string | null;
   featuredImage?: (number | null) | Media;
   /**
    * Check if this project should appear on the homepage
@@ -962,7 +962,7 @@ export interface BlogPost {
   /**
    * Paste valid JSON for structured data
    */
-  metaStructuredData?: string | null;
+  seoStructuredData?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1589,7 +1589,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   client?: T;
   metaDescription?: T;
   metaKey?: T;
-  metaStructuredData?: T;
+  seoStructuredData?: T;
   featuredImage?: T;
   featuredOnHome?: T;
   isResidential?: T;
@@ -1728,7 +1728,7 @@ export interface BlogPostsSelect<T extends boolean = true> {
   publishedDate?: T;
   metaDescription?: T;
   metaKey?: T;
-  metaStructuredData?: T;
+  seoStructuredData?: T;
   updatedAt?: T;
   createdAt?: T;
 }

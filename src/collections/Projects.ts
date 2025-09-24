@@ -27,7 +27,7 @@ const Projects: CollectionConfig = {
     { name: 'metaDescription', type: 'textarea' },
     { name: 'metaKey', type: 'text' },
     {
-      name: 'metaStructuredData',
+      name: 'seoStructuredData',
       label: 'Custom JSON-LD',
       type: 'textarea',
       admin: {
