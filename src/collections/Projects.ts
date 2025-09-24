@@ -1,4 +1,5 @@
 import { CollectionConfig } from 'payload'
+import slugify from 'slugify'
 
 const Projects: CollectionConfig = {
   slug: 'projects',
@@ -8,6 +9,15 @@ const Projects: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true },
+    {
+      name: 'slug',
+      type: 'text',
+      required: false,
+      unique: false,
+      admin: {
+        readOnly: false, // prevents manual editing in admin panel
+      },
+    },
     { name: 'category', type: 'relationship', relationTo: 'project-categories' },
     { name: 'shortDescription', type: 'textarea' },
     { name: 'year', type: 'text' },
@@ -58,6 +68,16 @@ const Projects: CollectionConfig = {
       ],
     },
   ],
+  hooks: {
+    beforeValidate: [
+      ({ data }) => {
+        if (data?.title) {
+          data.slug = slugify(data.title, { lower: true, strict: true })
+        }
+        return data
+      },
+    ],
+  },
 }
 
 export default Projects

@@ -761,6 +761,7 @@ export interface Form {
 export interface Project {
   id: number;
   title: string;
+  slug?: string | null;
   category?: (number | null) | ProjectCategory;
   shortDescription?: string | null;
   year?: string | null;
@@ -1555,6 +1556,7 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface ProjectsSelect<T extends boolean = true> {
   title?: T;
+  slug?: T;
   category?: T;
   shortDescription?: T;
   year?: T;
