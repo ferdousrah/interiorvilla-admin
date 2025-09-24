@@ -768,11 +768,29 @@ export interface Project {
   size?: string | null;
   location?: string | null;
   client?: string | null;
+  metaDescription?: string | null;
+  metaKey?: string | null;
+  /**
+   * Paste valid JSON for structured data
+   */
+  metaStructuredData?: string | null;
   featuredImage?: (number | null) | Media;
   /**
    * Check if this project should appear on the homepage
    */
   featuredOnHome?: boolean | null;
+  /**
+   * Check if this project parent is a residential project
+   */
+  isResidential?: boolean | null;
+  /**
+   * Check if this project parent is a commercial project
+   */
+  isCommercial?: boolean | null;
+  /**
+   * Check if this project parent is a architectural project
+   */
+  isArchitectural?: boolean | null;
   /**
    * Use for ordering projects on the homepage. Lower numbers appear first.
    */
@@ -939,6 +957,12 @@ export interface BlogPost {
       }[]
     | null;
   publishedDate: string;
+  metaDescription?: string | null;
+  metaKey?: string | null;
+  /**
+   * Paste valid JSON for structured data
+   */
+  metaStructuredData?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1563,8 +1587,14 @@ export interface ProjectsSelect<T extends boolean = true> {
   size?: T;
   location?: T;
   client?: T;
+  metaDescription?: T;
+  metaKey?: T;
+  metaStructuredData?: T;
   featuredImage?: T;
   featuredOnHome?: T;
+  isResidential?: T;
+  isCommercial?: T;
+  isArchitectural?: T;
   position?: T;
   beforeAfterImages?:
     | T
@@ -1696,6 +1726,9 @@ export interface BlogPostsSelect<T extends boolean = true> {
         id?: T;
       };
   publishedDate?: T;
+  metaDescription?: T;
+  metaKey?: T;
+  metaStructuredData?: T;
   updatedAt?: T;
   createdAt?: T;
 }

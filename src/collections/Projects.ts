@@ -24,6 +24,16 @@ const Projects: CollectionConfig = {
     { name: 'size', type: 'text' },
     { name: 'location', type: 'text' },
     { name: 'client', type: 'text' },
+    { name: 'metaDescription', type: 'textarea' },
+    { name: 'metaKey', type: 'text' },
+    {
+      name: 'metaStructuredData',
+      label: 'Custom JSON-LD',
+      type: 'textarea',
+      admin: {
+        description: 'Paste valid JSON for structured data',
+      },
+    },
     { name: 'featuredImage', type: 'upload', relationTo: 'media' },
     // 👇 New field: Featured on Home
     {
@@ -34,6 +44,36 @@ const Projects: CollectionConfig = {
       admin: {
         position: 'sidebar', // optional: keeps it visible in the sidebar
         description: 'Check if this project should appear on the homepage',
+      },
+    },
+    {
+      name: 'isResidential',
+      label: 'Is Residential?',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar', // optional: keeps it visible in the sidebar
+        description: 'Check if this project parent is a residential project',
+      },
+    },
+    {
+      name: 'isCommercial',
+      label: 'Is Commercial?',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar', // optional: keeps it visible in the sidebar
+        description: 'Check if this project parent is a commercial project',
+      },
+    },
+    {
+      name: 'isArchitectural',
+      label: 'Is Architectural?',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar', // optional: keeps it visible in the sidebar
+        description: 'Check if this project parent is a architectural project',
       },
     },
     {

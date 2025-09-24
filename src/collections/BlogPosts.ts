@@ -68,6 +68,16 @@ const BlogPosts: CollectionConfig = {
         },
       },
     },
+    { name: 'metaDescription', type: 'textarea' },
+    { name: 'metaKey', type: 'text' },
+    {
+      name: 'metaStructuredData',
+      label: 'Custom JSON-LD',
+      type: 'textarea',
+      admin: {
+        description: 'Paste valid JSON for structured data',
+      },
+    },
   ],
   hooks: {
     beforeValidate: [
