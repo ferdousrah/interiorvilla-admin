@@ -1,7 +1,7 @@
 import { GlobalConfig } from 'payload'
 
-const Contact: GlobalConfig = {
-  slug: 'contact',
+const Blog: GlobalConfig = {
+  slug: 'blog',
   access: { read: () => true },
   fields: [
     {
@@ -16,12 +16,6 @@ const Contact: GlobalConfig = {
     {
       name: 'introText',
       type: 'textarea',
-    },
-    {
-      name: 'offices',
-      type: 'relationship',
-      relationTo: 'offices',
-      hasMany: true,
     },
     {
       name: 'seoDetails',
@@ -43,4 +37,4 @@ const Contact: GlobalConfig = {
   ],
 }
 
-export default Contact
+export default Blog

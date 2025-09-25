@@ -82,6 +82,23 @@ const Home: GlobalConfig = {
         { name: 'backgroundColor', type: 'text' },
       ],
     },
+    {
+      name: 'seoDetails',
+      type: 'group',
+      fields: [
+        { name: 'metaTitle', type: 'text' },
+        { name: 'metaDescription', type: 'textarea' },
+        { name: 'metaKey', type: 'text' },
+        {
+          name: 'seoStructuredData',
+          label: 'Custom JSON-LD',
+          type: 'textarea',
+          admin: {
+            description: 'Paste valid JSON for structured data',
+          },
+        },
+      ],
+    },
   ],
 }
 

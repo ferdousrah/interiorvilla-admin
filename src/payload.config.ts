@@ -30,6 +30,7 @@ import Home from './globals/Home'
 import About from './globals/About'
 import Portfolio from './globals/Portfolio'
 import Contact from './globals/Contact'
+import Blog from './globals/Blog'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -101,7 +102,7 @@ export default buildConfig({
     'https://bolt.new',
   ],
   csrf: ['http://localhost:3000', 'https://interiorvillabd.com', 'https://bolt.new'],
-  globals: [Header, Footer, Home, About, Portfolio, Contact],
+  globals: [Header, Footer, Home, Blog, About, Portfolio, Contact],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

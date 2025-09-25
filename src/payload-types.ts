@@ -120,6 +120,7 @@ export interface Config {
     header: Header;
     footer: Footer;
     home: Home;
+    blog: Blog;
     about: About;
     portfolio: Portfolio;
     contact: Contact;
@@ -128,6 +129,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     home: HomeSelect<false> | HomeSelect<true>;
+    blog: BlogSelect<false> | BlogSelect<true>;
     about: AboutSelect<false> | AboutSelect<true>;
     portfolio: PortfolioSelect<false> | PortfolioSelect<true>;
     contact: ContactSelect<false> | ContactSelect<true>;
@@ -890,6 +892,15 @@ export interface Service {
     sectionTitle?: string | null;
     sectionDescription?: string | null;
     projects?: (number | Project)[] | null;
+  };
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1680,6 +1691,14 @@ export interface ServicesSelect<T extends boolean = true> {
         sectionDescription?: T;
         projects?: T;
       };
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -2122,6 +2141,39 @@ export interface Home {
     testimonials?: (number | Testimonial)[] | null;
     backgroundColor?: string | null;
   };
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog".
+ */
+export interface Blog {
+  id: number;
+  hero?: {
+    heroImage?: (number | null) | Media;
+    title?: string | null;
+    subtitle?: string | null;
+  };
+  introText?: string | null;
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2199,6 +2251,15 @@ export interface About {
     description?: string | null;
     teamMembers?: (number | TeamMember)[] | null;
   };
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2214,6 +2275,15 @@ export interface Portfolio {
     subtitle?: string | null;
   };
   introText?: string | null;
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2230,6 +2300,15 @@ export interface Contact {
   };
   introText?: string | null;
   offices?: (number | Office)[] | null;
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -2341,6 +2420,39 @@ export interface HomeSelect<T extends boolean = true> {
         testimonials?: T;
         backgroundColor?: T;
       };
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "blog_select".
+ */
+export interface BlogSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        heroImage?: T;
+        title?: T;
+        subtitle?: T;
+      };
+  introText?: T;
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2400,6 +2512,14 @@ export interface AboutSelect<T extends boolean = true> {
         description?: T;
         teamMembers?: T;
       };
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2417,6 +2537,14 @@ export interface PortfolioSelect<T extends boolean = true> {
         subtitle?: T;
       };
   introText?: T;
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -2435,6 +2563,14 @@ export interface ContactSelect<T extends boolean = true> {
       };
   introText?: T;
   offices?: T;
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
