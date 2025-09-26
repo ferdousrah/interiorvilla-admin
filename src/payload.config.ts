@@ -101,9 +101,9 @@ export default buildConfig({
   cors: [
     'http://localhost:3000', // dev
     'https://interiorvillabd.com', // your production site (adjust)
-    'https://bolt.new',
+    'https://www.interiorvillabd.com', // your production site (adjust)
   ],
-  csrf: ['http://localhost:3000', 'https://interiorvillabd.com', 'https://bolt.new'],
+  csrf: ['http://localhost:3000', 'https://interiorvillabd.com', 'https://www.interiorvillabd.com'],
   globals: [Header, Footer, Home, Blog, About, Portfolio, Contact],
   plugins: [
     ...plugins,
