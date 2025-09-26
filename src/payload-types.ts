@@ -1015,6 +1015,7 @@ export interface Slider {
     image?: (number | null) | Media;
     title?: string | null;
     subtitle?: string | null;
+    position?: string | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1806,6 +1807,7 @@ export interface SliderSelect<T extends boolean = true> {
         image?: T;
         title?: T;
         subtitle?: T;
+        position?: T;
       };
   updatedAt?: T;
   createdAt?: T;

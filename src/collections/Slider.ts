@@ -11,6 +11,7 @@ const Slider: CollectionConfig = {
         { name: 'image', type: 'upload', relationTo: 'media' },
         { name: 'title', type: 'text' },
         { name: 'subtitle', type: 'textarea' },
+        { name: 'position', type: 'text' },
       ],
     },
   ],
