@@ -80,6 +80,7 @@ export interface Config {
     'blog-posts': BlogPost;
     'blog-categories': BlogCategory;
     offices: Office;
+    slider: Slider;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -104,6 +105,7 @@ export interface Config {
     'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
     'blog-categories': BlogCategoriesSelect<false> | BlogCategoriesSelect<true>;
     offices: OfficesSelect<false> | OfficesSelect<true>;
+    slider: SliderSelect<false> | SliderSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -1005,6 +1007,20 @@ export interface Office {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "slider".
+ */
+export interface Slider {
+  id: number;
+  slider?: {
+    image?: (number | null) | Media;
+    title?: string | null;
+    subtitle?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1227,6 +1243,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'offices';
         value: number | Office;
+      } | null)
+    | ({
+        relationTo: 'slider';
+        value: number | Slider;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1772,6 +1792,21 @@ export interface OfficesSelect<T extends boolean = true> {
   longitude?: T;
   phone?: T;
   email?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "slider_select".
+ */
+export interface SliderSelect<T extends boolean = true> {
+  slider?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        subtitle?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

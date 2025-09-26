@@ -25,6 +25,7 @@ import TeamMembers from './collections/TeamMembers'
 import BlogPosts from './collections/BlogPosts'
 import BlogCategories from './collections/BlogCategories'
 import Offices from './collections/Offices'
+import Slider from './collections/Slider'
 
 import Home from './globals/Home'
 import About from './globals/About'
@@ -95,6 +96,7 @@ export default buildConfig({
     BlogPosts,
     BlogCategories,
     Offices,
+    Slider,
   ],
   cors: [
     'http://localhost:3000', // dev
