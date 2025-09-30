@@ -85,6 +85,14 @@ const Projects: CollectionConfig = {
       },
     },
     {
+      name: 'portfolioPosition',
+      type: 'text',
+      admin: {
+        description: 'Use for ordering projects on the portfolio page. Lower numbers appear first.',
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'beforeAfterImages',
       type: 'array',
       fields: [{ name: 'image', type: 'upload', relationTo: 'media' }],

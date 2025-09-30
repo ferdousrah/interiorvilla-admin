@@ -799,6 +799,10 @@ export interface Project {
    * Use for ordering projects on the homepage. Lower numbers appear first.
    */
   position?: string | null;
+  /**
+   * Use for ordering projects on the portfolio page. Lower numbers appear first.
+   */
+  portfolioPosition?: string | null;
   beforeAfterImages?:
     | {
         image?: (number | null) | Media;
@@ -1628,6 +1632,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   isCommercial?: T;
   isArchitectural?: T;
   position?: T;
+  portfolioPosition?: T;
   beforeAfterImages?:
     | T
     | {
