@@ -170,7 +170,7 @@ export default buildConfig({
       try {
         const [projects, blogPosts] = await Promise.all([
           payload.find({ collection: 'projects', depth: 1, limit: 1000 }),
-          payload.find({ collection: 'blogPosts', depth: 1, limit: 1000 }),
+          payload.find({ collection: 'blog-posts', depth: 1, limit: 1000 }),
         ])
 
         const urls: string[] = []
