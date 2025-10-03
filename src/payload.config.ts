@@ -4,7 +4,7 @@ import sharp from 'sharp'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
-import express, { Request, Response } from 'express'
+import { Request, Response } from 'express'
 
 // Collections
 import { Categories } from './collections/Categories'
@@ -38,16 +38,14 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
-  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL, // e.g. https://cms.interiorvillabd.com
+  serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL,
   defaultDepth: 1,
   admin: {
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
       beforeDashboard: ['@/components/BeforeDashboard'],
     },
-    importMap: {
-      baseDir: path.resolve(dirname),
-    },
+    importMap: { baseDir: path.resolve(dirname) },
     user: Users.slug,
     livePreview: {
       breakpoints: [
@@ -59,9 +57,7 @@ export default buildConfig({
   },
   editor: defaultLexical,
   db: postgresAdapter({
-    pool: {
-      connectionString: process.env.DATABASE_URI || '',
-    },
+    pool: { connectionString: process.env.DATABASE_URI || '' },
   }),
   collections: [
     Pages,
@@ -82,15 +78,10 @@ export default buildConfig({
   cors: ['http://localhost:3000', 'https://interiorvillabd.com', 'https://www.interiorvillabd.com'],
   csrf: ['http://localhost:3000', 'https://interiorvillabd.com', 'https://www.interiorvillabd.com'],
   globals: [Header, Footer, Home, Blog, About, Portfolio, Contact],
-  plugins: [
-    ...plugins,
-    // storage-adapter-placeholder
-  ],
+  plugins: [...plugins],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
-  typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
-  },
+  typescript: { outputFile: path.resolve(dirname, 'payload-types.ts') },
   jobs: {
     access: {
       run: ({ req }): boolean => {
@@ -102,22 +93,22 @@ export default buildConfig({
     tasks: [],
   },
 
-  /** ✅ Express custom routes */
-  express: (app) => {
-    // Dynamic sitemap.xml
+  /** ✅ Register custom routes on server init */
+  onInit: async (payload) => {
+    const app = payload.express
+    const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://interiorvillabd.com'
+
+    // Sitemap
     app.get('/sitemap.xml', async (req: Request, res: Response) => {
       try {
-        const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://interiorvillabd.com'
-
-        // Fetch dynamic content
         const [projects, blogPosts] = await Promise.all([
-          req.payload.find({ collection: 'projects', depth: 1, limit: 1000 }),
-          req.payload.find({ collection: 'blogPosts', depth: 1, limit: 1000 }),
+          payload.find({ collection: 'projects', depth: 1, limit: 1000 }),
+          payload.find({ collection: 'blogPosts', depth: 1, limit: 1000 }),
         ])
 
         const urls: string[] = []
 
-        // Static routes
+        // Static
         const staticRoutes = [
           { path: '/', priority: 1.0 },
           { path: '/about', priority: 0.9 },
@@ -185,7 +176,7 @@ export default buildConfig({
   </url>`),
         )
 
-        // Projects
+        // Dynamic projects
         projects.docs.forEach((p: any) => {
           if (p.slug) {
             urls.push(`
@@ -198,7 +189,7 @@ export default buildConfig({
           }
         })
 
-        // Blog posts
+        // Dynamic blogs
         blogPosts.docs.forEach((b: any) => {
           if (b.slug) {
             urls.push(`
@@ -223,9 +214,8 @@ ${urls.join('\n')}
       }
     })
 
-    // robots.txt
+    // Robots.txt
     app.get('/robots.txt', (req: Request, res: Response) => {
-      const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://interiorvillabd.com'
       res.type('text/plain').send(`User-agent: *
 Disallow: /admin/
 Disallow: /api/
