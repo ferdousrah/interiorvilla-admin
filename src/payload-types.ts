@@ -772,13 +772,15 @@ export interface Project {
   size?: string | null;
   location?: string | null;
   client?: string | null;
-  metaTitle?: string | null;
-  metaDescription?: string | null;
-  metaKey?: string | null;
-  /**
-   * Paste valid JSON for structured data
-   */
-  seoStructuredData?: string | null;
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
+  };
   featuredImage?: (number | null) | Media;
   /**
    * Check if this project should appear on the homepage
@@ -975,13 +977,15 @@ export interface BlogPost {
       }[]
     | null;
   publishedDate: string;
-  metaTitle?: string | null;
-  metaDescription?: string | null;
-  metaKey?: string | null;
-  /**
-   * Paste valid JSON for structured data
-   */
-  seoStructuredData?: string | null;
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1625,10 +1629,14 @@ export interface ProjectsSelect<T extends boolean = true> {
   size?: T;
   location?: T;
   client?: T;
-  metaTitle?: T;
-  metaDescription?: T;
-  metaKey?: T;
-  seoStructuredData?: T;
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
+      };
   featuredImage?: T;
   featuredOnHome?: T;
   isResidential?: T;
@@ -1774,10 +1782,14 @@ export interface BlogPostsSelect<T extends boolean = true> {
         id?: T;
       };
   publishedDate?: T;
-  metaTitle?: T;
-  metaDescription?: T;
-  metaKey?: T;
-  seoStructuredData?: T;
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }
