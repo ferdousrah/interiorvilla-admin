@@ -68,6 +68,7 @@ const BlogPosts: CollectionConfig = {
         },
       },
     },
+    { name: 'metaTitle', type: 'text' },
     { name: 'metaDescription', type: 'textarea' },
     { name: 'metaKey', type: 'text' },
     {

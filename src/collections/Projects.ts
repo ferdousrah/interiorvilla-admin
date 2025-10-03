@@ -24,6 +24,7 @@ const Projects: CollectionConfig = {
     { name: 'size', type: 'text' },
     { name: 'location', type: 'text' },
     { name: 'client', type: 'text' },
+    { name: 'metaTitle', type: 'text' },
     { name: 'metaDescription', type: 'textarea' },
     { name: 'metaKey', type: 'text' },
     {

@@ -772,6 +772,7 @@ export interface Project {
   size?: string | null;
   location?: string | null;
   client?: string | null;
+  metaTitle?: string | null;
   metaDescription?: string | null;
   metaKey?: string | null;
   /**
@@ -974,6 +975,7 @@ export interface BlogPost {
       }[]
     | null;
   publishedDate: string;
+  metaTitle?: string | null;
   metaDescription?: string | null;
   metaKey?: string | null;
   /**
@@ -1623,6 +1625,7 @@ export interface ProjectsSelect<T extends boolean = true> {
   size?: T;
   location?: T;
   client?: T;
+  metaTitle?: T;
   metaDescription?: T;
   metaKey?: T;
   seoStructuredData?: T;
@@ -1771,6 +1774,7 @@ export interface BlogPostsSelect<T extends boolean = true> {
         id?: T;
       };
   publishedDate?: T;
+  metaTitle?: T;
   metaDescription?: T;
   metaKey?: T;
   seoStructuredData?: T;
