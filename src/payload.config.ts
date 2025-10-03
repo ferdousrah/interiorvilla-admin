@@ -1,11 +1,12 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
-
-import sharp from 'sharp' // sharp-import
+import sharp from 'sharp'
 import path from 'path'
-import { buildConfig, PayloadRequest } from 'payload'
+import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
+import express, { Request, Response } from 'express'
 
+// Collections
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -26,6 +27,7 @@ import BlogCategories from './collections/BlogCategories'
 import Offices from './collections/Offices'
 import Slider from './collections/Slider'
 
+// Globals
 import Home from './globals/Home'
 import About from './globals/About'
 import Portfolio from './globals/Portfolio'
@@ -91,7 +93,7 @@ export default buildConfig({
   },
   jobs: {
     access: {
-      run: ({ req }: { req: PayloadRequest }): boolean => {
+      run: ({ req }): boolean => {
         if (req.user) return true
         const authHeader = req.headers.get('authorization')
         return authHeader === `Bearer ${process.env.CRON_SECRET}`
@@ -99,13 +101,15 @@ export default buildConfig({
     },
     tasks: [],
   },
-  onInit: async (payload) => {
-    // ✅ Add dynamic sitemap route
-    payload.express.get('/sitemap.xml', async (req, res) => {
+
+  /** ✅ Express custom routes */
+  express: (app) => {
+    // Dynamic sitemap.xml
+    app.get('/sitemap.xml', async (req: Request, res: Response) => {
       try {
         const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://interiorvillabd.com'
 
-        // Fetch dynamic data
+        // Fetch dynamic content
         const [projects, blogPosts] = await Promise.all([
           req.payload.find({ collection: 'projects', depth: 1, limit: 1000 }),
           req.payload.find({ collection: 'blogPosts', depth: 1, limit: 1000 }),
@@ -113,7 +117,7 @@ export default buildConfig({
 
         const urls: string[] = []
 
-        // Static routes with priorities
+        // Static routes
         const staticRoutes = [
           { path: '/', priority: 1.0 },
           { path: '/about', priority: 0.9 },
@@ -173,75 +177,67 @@ export default buildConfig({
 
         staticRoutes.forEach((r) =>
           urls.push(`
-            <url>
-              <loc>${baseUrl}${r.path}</loc>
-              <lastmod>${new Date().toISOString()}</lastmod>
-              <changefreq>monthly</changefreq>
-              <priority>${r.priority}</priority>
-            </url>
-          `),
+  <url>
+    <loc>${baseUrl}${r.path}</loc>
+    <lastmod>${new Date().toISOString()}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>${r.priority}</priority>
+  </url>`),
         )
 
         // Projects
         projects.docs.forEach((p: any) => {
           if (p.slug) {
-            const imageUrl = p?.featuredImage?.url ? `${baseUrl}${p.featuredImage.url}` : null
-
             urls.push(`
-              <url>
-                <loc>${baseUrl}/project-details/${p.slug}</loc>
-                <lastmod>${p.updatedAt || p.createdAt}</lastmod>
-                <changefreq>monthly</changefreq>
-                <priority>0.8</priority>
-                ${
-                  imageUrl
-                    ? `<image:image>
-                  <image:loc>${imageUrl}</image:loc>
-                  <image:title><![CDATA[${p.title || 'Project'}]]></image:title>
-                </image:image>`
-                    : ''
-                }
-              </url>
-            `)
+  <url>
+    <loc>${baseUrl}/project-details/${p.slug}</loc>
+    <lastmod>${p.updatedAt || p.createdAt}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>`)
           }
         })
 
         // Blog posts
         blogPosts.docs.forEach((b: any) => {
           if (b.slug) {
-            const imageUrl = b?.featuredImage?.url ? `${baseUrl}${b.featuredImage.url}` : null
-
             urls.push(`
-              <url>
-                <loc>${baseUrl}/blog/${b.slug}</loc>
-                <lastmod>${b.updatedAt || b.createdAt}</lastmod>
-                <changefreq>weekly</changefreq>
-                <priority>0.6</priority>
-                ${
-                  imageUrl
-                    ? `<image:image>
-                  <image:loc>${imageUrl}</image:loc>
-                  <image:title><![CDATA[${b.title || 'Blog Post'}]]></image:title>
-                </image:image>`
-                    : ''
-                }
-              </url>
-            `)
+  <url>
+    <loc>${baseUrl}/blog/${b.slug}</loc>
+    <lastmod>${b.updatedAt || b.createdAt}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>`)
           }
         })
 
         const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-          <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-                  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-          ${urls.join('\n')}
-          </urlset>`
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join('\n')}
+</urlset>`
 
-        res.type('application/xml')
-        res.send(sitemap)
+        res.type('application/xml').send(sitemap)
       } catch (err) {
         console.error('Error generating sitemap:', err)
         res.status(500).send('Error generating sitemap')
       }
+    })
+
+    // robots.txt
+    app.get('/robots.txt', (req: Request, res: Response) => {
+      const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://interiorvillabd.com'
+      res.type('text/plain').send(`User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /media/
+Disallow: /src/
+Disallow: /dist/
+Disallow: /*.js$
+Disallow: /*.ts$
+Disallow: /*.tsx$
+Disallow: /*.css$
+
+Sitemap: ${baseUrl}/sitemap.xml`)
     })
   },
 })
