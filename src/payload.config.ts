@@ -1,11 +1,10 @@
 // storage-adapter-import-placeholder
 import { postgresAdapter } from '@payloadcms/db-postgres'
 
-import sharp from 'sharp'
+import sharp from 'sharp' // sharp-import
 import path from 'path'
-import { buildConfig } from 'payload'
+import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
-import type { Express, Request, Response } from 'express'
 
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
@@ -58,7 +57,9 @@ export default buildConfig({
   },
   editor: defaultLexical,
   db: postgresAdapter({
-    pool: { connectionString: process.env.DATABASE_URI || '' },
+    pool: {
+      connectionString: process.env.DATABASE_URI || '',
+    },
   }),
   collections: [
     Pages,
@@ -88,17 +89,33 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+  jobs: {
+    access: {
+      run: ({ req }: { req: PayloadRequest }): boolean => {
+        if (req.user) return true
+        const authHeader = req.headers.get('authorization')
+        return authHeader === `Bearer ${process.env.CRON_SECRET}`
+      },
+    },
+    tasks: [],
+  },
 
-  /** ✅ Add custom express routes here */
-  expressRoutes: (app: Express, payload) => {
+  /** ✅ Custom routes for sitemap & robots.txt */
+  onInit: async (payload) => {
+    const app = (payload as any).express
+    if (!app) {
+      console.warn('⚠️ Express not found. Skipping custom routes.')
+      return
+    }
+
     const baseUrl = process.env.PAYLOAD_PUBLIC_SERVER_URL || 'https://interiorvillabd.com'
 
     // Sitemap
-    app.get('/sitemap.xml', async (req: Request, res: Response) => {
+    app.get('/sitemap.xml', async (req: any, res: any) => {
       try {
         const [projects, blogPosts] = await Promise.all([
           payload.find({ collection: 'projects', depth: 1, limit: 1000 }),
-          payload.find({ collection: 'blogPosts', depth: 1, limit: 1000 }),
+          payload.find({ collection: 'blog-posts', depth: 1, limit: 1000 }),
         ])
 
         const urls: string[] = [
@@ -140,7 +157,7 @@ ${urls
     })
 
     // Robots.txt
-    app.get('/robots.txt', (req: Request, res: Response) => {
+    app.get('/robots.txt', (req: any, res: any) => {
       res.type('text/plain').send(`User-agent: *
 Disallow: /admin/
 Disallow: /api/
