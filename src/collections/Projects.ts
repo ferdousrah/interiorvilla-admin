@@ -85,7 +85,7 @@ const Projects: CollectionConfig = {
     },
     {
       name: 'position',
-      type: 'text',
+      type: 'number',
       admin: {
         description: 'Use for ordering projects on the homepage. Lower numbers appear first.',
         position: 'sidebar',
@@ -93,7 +93,7 @@ const Projects: CollectionConfig = {
     },
     {
       name: 'portfolioPosition',
-      type: 'text',
+      type: 'number',
       admin: {
         description: 'Use for ordering projects on the portfolio page. Lower numbers appear first.',
         position: 'sidebar',

@@ -801,11 +801,11 @@ export interface Project {
   /**
    * Use for ordering projects on the homepage. Lower numbers appear first.
    */
-  position?: string | null;
+  position?: number | null;
   /**
    * Use for ordering projects on the portfolio page. Lower numbers appear first.
    */
-  portfolioPosition?: string | null;
+  portfolioPosition?: number | null;
   beforeAfterImages?:
     | {
         image?: (number | null) | Media;
