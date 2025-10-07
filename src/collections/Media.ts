@@ -17,7 +17,14 @@ export const Media: CollectionConfig = {
   slug: 'media',
   upload: {
     imageSizes: [
-      { name: 'thumbnail', width: 300, withoutEnlargement: true },
+      {
+        name: 'thumbnail',
+        width: 300,
+        withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+        },
+      },
       {
         name: 'square',
         width: 500,
@@ -25,11 +32,53 @@ export const Media: CollectionConfig = {
         fit: 'cover',
         position: 'center',
         withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+        },
       },
-      { name: 'small', width: 600, withoutEnlargement: true },
-      { name: 'medium', width: 900, withoutEnlargement: true },
-      { name: 'large', width: 1400, withoutEnlargement: true },
-      { name: 'xlarge', width: 1920, withoutEnlargement: true },
+      {
+        name: 'small',
+        width: 600,
+        withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+        },
+      },
+      {
+        name: 'medium',
+        width: 900,
+        withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+        },
+      },
+      {
+        name: 'large',
+        width: 1400,
+        withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+        },
+      },
+      {
+        name: 'xlarge',
+        width: 1920,
+        withoutEnlargement: true,
+        formatOptions: {
+          format: 'webp',
+        },
+      },
+      {
+        name: 'blur',
+        width: 20,
+        height: 20,
+        position: 'centre',
+        // ✅ This is the correct way now
+        formatOptions: {
+          format: 'webp',
+        }, // ensures webp output
+        withoutEnlargement: true,
+      },
       {
         name: 'og',
         width: 1200,
@@ -75,55 +124,6 @@ export const Media: CollectionConfig = {
   ],
 
   hooks: {
-    // Generate/refresh WebP whenever the original changes
-    afterChange: [
-      async ({ req, doc /*, operation*/ }) => {
-        try {
-          const mime: string = (doc as any)?.mimeType ?? ''
-          if (!mime.startsWith('image/')) return doc
-
-          const filename: string | undefined = (doc as any)?.filename
-          if (!filename) return doc
-
-          const originalAbs = path.join(UPLOAD_DIR, filename)
-          const webpFilename = filename.replace(/\.[^.]+$/, '') + '.webp'
-          const webpAbs = path.join(UPLOAD_DIR, webpFilename)
-
-          // Create WebP alongside original
-          const img = sharp(originalAbs)
-          const meta = await img.metadata()
-          await img.toFormat('webp', { quality: 82 }).toFile(webpAbs)
-          await fs.access(webpAbs)
-
-          const sizes = (doc as any).sizes || {}
-          sizes.webp = {
-            filename: webpFilename,
-            url: `${PUBLIC_URL_PREFIX}/${webpFilename}`,
-            width: meta.width ?? undefined,
-            height: meta.height ?? undefined,
-            mimeType: 'image/webp',
-          }
-
-          const updated = await req.payload.update({
-            collection: 'media',
-            id: (doc as any).id,
-            data: { sizes },
-            overrideAccess: true,
-            depth: 0,
-            draft: false,
-            // @ts-expect-error – supported at runtime to avoid loop
-            disableHooks: true,
-          })
-
-          return updated
-        } catch (e) {
-          req.payload.logger?.warn?.(`WebP hook skipped: ${(e as Error).message}`)
-          return doc
-        }
-      },
-    ],
-
-    // Add ?v=updatedAt and expose webpUrl (relative) for easy use via your Nginx proxy
     afterRead: [
       ({ doc }) => {
         try {
@@ -131,17 +131,7 @@ export const Media: CollectionConfig = {
           if ((doc as any)?.url && (doc as any)?.updatedAt) {
             const u = new URL((doc as any).url as string, base)
             u.searchParams.set('v', String(new Date((doc as any).updatedAt as string).getTime()))
-            ;(doc as any).url = u.pathname + u.search // keep relative
-          }
-
-          const sizes = (doc as any)?.sizes
-          const wurl: string | undefined = sizes?.webp?.url
-          if (wurl) {
-            const baseUrl = new URL((doc as any).url, base)
-            const v = baseUrl.searchParams.get('v') || undefined
-            const wu = new URL(wurl, base)
-            if (v) wu.searchParams.set('v', v)
-            ;(doc as any).webpUrl = wu.pathname + wu.search
+            ;(doc as any).url = u.pathname + u.search
           }
         } catch {
           /* ignore */
