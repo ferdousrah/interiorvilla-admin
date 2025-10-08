@@ -98,11 +98,14 @@ export default buildConfig({
     Offices,
     Slider,
   ],
-  cors: [
-    'http://localhost:3000', // dev
-    'https://interiorvillabd.com', // your production site (adjust)
-    'https://www.interiorvillabd.com', // your production site (adjust)
-  ],
+  cors: {
+    origins: [
+      'http://localhost:3000',
+      'https://interiorvillabd.com',
+      'https://www.interiorvillabd.com',
+    ],
+    headers: ['x-custom-header'],
+  },
   csrf: ['http://localhost:3000', 'https://interiorvillabd.com', 'https://www.interiorvillabd.com'],
   globals: [Header, Footer, Home, Blog, About, Portfolio, Contact],
   plugins: [
