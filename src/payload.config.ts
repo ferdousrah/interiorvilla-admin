@@ -32,7 +32,7 @@ import About from './globals/About'
 import Portfolio from './globals/Portfolio'
 import Contact from './globals/Contact'
 import Blog from './globals/Blog'
-import { sendEmailHandler } from './payload-cms-email-endpoint'
+import { sendEmailHandler } from './payload-cms-email-endpoint.js'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
