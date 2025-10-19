@@ -32,6 +32,7 @@ import About from './globals/About'
 import Portfolio from './globals/Portfolio'
 import Contact from './globals/Contact'
 import Blog from './globals/Blog'
+import { sendEmailHandler } from './payload-cms-email-endpoint'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -117,6 +118,13 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
+  endpoints: [
+    {
+      path: '/send-email',
+      method: 'post',
+      handler: sendEmailHandler,
+    },
+  ],
   jobs: {
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {
