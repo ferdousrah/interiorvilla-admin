@@ -94,7 +94,7 @@ export const sendEmailHandler = async (req) => {
       },
       body: JSON.stringify({
         from: 'Interior Villa <onboarding@resend.dev>',
-        to: ['bdtechnocrats@gmail.com', 'info@interiorvillabd.com'],
+        to: ['info@interiorvillabd.com'],
         subject: emailSubject,
         html: emailHtml,
       }),
