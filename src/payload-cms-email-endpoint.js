@@ -21,25 +21,31 @@
  * Option 2: As a separate route file in your Express app
  */
 
-import axios from 'axios';
-
+// Use node-fetch or native fetch instead of axios for better compatibility
 export const sendEmailHandler = async (req, res) => {
   try {
-    const { type, name, email, mobile, address, subject, message } = req.body;
+    // Log the request for debugging
+    console.log('Email endpoint hit:', {
+      body: req.body,
+      hasBody: !!req.body,
+      contentType: req.headers['content-type'],
+    })
 
-    const RESEND_API_KEY = process.env.RESEND_API_KEY;
+    const { type, name, email, mobile, address, subject, message } = req.body || {}
+
+    const RESEND_API_KEY = process.env.RESEND_API_KEY
 
     if (!RESEND_API_KEY) {
       return res.status(500).json({
-        error: "RESEND_API_KEY not configured in environment variables"
-      });
+        error: 'RESEND_API_KEY not configured in environment variables',
+      })
     }
 
-    let emailSubject = "";
-    let emailHtml = "";
+    let emailSubject = ''
+    let emailHtml = ''
 
-    if (type === "appointment") {
-      emailSubject = "New Appointment Request - Interior Villa";
+    if (type === 'appointment') {
+      emailSubject = 'New Appointment Request - Interior Villa'
       emailHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
           <div style="background-color: #75BF44; padding: 20px; text-align: center;">
@@ -66,9 +72,9 @@ export const sendEmailHandler = async (req, res) => {
             <p>This is an automated message from Interior Villa BD website.</p>
           </div>
         </div>
-      `;
-    } else if (type === "contact") {
-      emailSubject = subject || "New Contact Form Submission - Interior Villa";
+      `
+    } else if (type === 'contact') {
+      emailSubject = subject || 'New Contact Form Submission - Interior Villa'
       emailHtml = `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
           <div style="background-color: #75BF44; padding: 20px; text-align: center;">
@@ -85,12 +91,16 @@ export const sendEmailHandler = async (req, res) => {
                 <td style="padding: 10px 0; color: #666; font-weight: bold;">Email:</td>
                 <td style="padding: 10px 0; color: #333;">${email}</td>
               </tr>
-              ${mobile ? `
+              ${
+                mobile
+                  ? `
               <tr>
                 <td style="padding: 10px 0; color: #666; font-weight: bold;">Mobile:</td>
                 <td style="padding: 10px 0; color: #333;">${mobile}</td>
               </tr>
-              ` : ''}
+              `
+                  : ''
+              }
             </table>
             <div style="margin-top: 30px;">
               <h3 style="color: #333; margin-bottom: 10px;">Message:</h3>
@@ -103,43 +113,59 @@ export const sendEmailHandler = async (req, res) => {
             <p>This is an automated message from Interior Villa BD website.</p>
           </div>
         </div>
-      `;
+      `
     } else {
       return res.status(400).json({
-        error: "Invalid request: type field must be 'appointment' or 'contact'"
-      });
+        error: "Invalid request: type field must be 'appointment' or 'contact'",
+      })
     }
 
-    const response = await axios.post(
-      "https://api.resend.com/emails",
-      {
-        from: "Interior Villa <onboarding@resend.dev>",
-        to: ["bdtechnocrats@gmail.com"],
+    // Use fetch instead of axios for better compatibility
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        from: 'Interior Villa <onboarding@resend.dev>',
+        to: ['bdtechnocrats@gmail.com'],
         subject: emailSubject,
         html: emailHtml,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      }),
+    })
+
+    const responseData = await response.json()
+
+    if (!response.ok) {
+      console.error('Resend API error:', responseData)
+      return res.status(response.status).json({
+        error: responseData.message || 'Failed to send email',
+        details: responseData,
+      })
+    }
+
+    console.log('Email sent successfully:', responseData)
 
     return res.status(200).json({
       success: true,
-      message: "Email sent successfully",
-      data: response.data
-    });
-
+      message: 'Email sent successfully',
+      data: responseData,
+    })
   } catch (error) {
-    console.error("Email sending error:", error.response?.data || error.message);
+    console.error('Email sending error:', error)
     return res.status(500).json({
-      error: error.response?.data?.message || "Failed to send email",
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
-    });
+      error: error.message || 'Failed to send email',
+      details:
+        process.env.NODE_ENV === 'development'
+          ? {
+              message: error.message,
+              stack: error.stack,
+            }
+          : undefined,
+    })
   }
-};
+}
 
 /**
  * SETUP INSTRUCTIONS FOR PAYLOAD CMS:
@@ -162,8 +188,7 @@ export const sendEmailHandler = async (req, res) => {
  *      ]
  *    })
  *
- * 4. Make sure axios is installed in your Payload CMS project:
- *    npm install axios
+ * 4. No additional packages needed - uses native fetch API
  *
  * 5. Add RESEND_API_KEY to your .env file in Payload CMS:
  *    RESEND_API_KEY=re_your_api_key_here
