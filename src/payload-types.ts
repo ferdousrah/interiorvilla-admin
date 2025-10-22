@@ -866,6 +866,7 @@ export interface ProjectCategory {
   id: number;
   title: string;
   slug?: string | null;
+  pslug?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1702,6 +1703,7 @@ export interface ProjectsSelect<T extends boolean = true> {
 export interface ProjectCategoriesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  pslug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

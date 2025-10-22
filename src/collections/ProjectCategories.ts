@@ -9,6 +9,7 @@ const ProjectCategories: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', required: true },
     { name: 'slug', type: 'text' },
+    { name: 'pslug', type: 'text' },
   ],
 }
 
