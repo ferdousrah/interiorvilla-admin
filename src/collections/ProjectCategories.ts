@@ -6,7 +6,10 @@ const ProjectCategories: CollectionConfig = {
   admin: {
     useAsTitle: 'title', // 👈 this tells Payload to show the title in dropdowns
   },
-  fields: [{ name: 'title', type: 'text', required: true }],
+  fields: [
+    { name: 'title', type: 'text', required: true },
+    { name: 'slug', type: 'text' },
+  ],
 }
 
 export default ProjectCategories
