@@ -81,6 +81,7 @@ export interface Config {
     'blog-categories': BlogCategory;
     offices: Office;
     slider: Slider;
+    'service-areas': ServiceArea;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -106,6 +107,7 @@ export interface Config {
     'blog-categories': BlogCategoriesSelect<false> | BlogCategoriesSelect<true>;
     offices: OfficesSelect<false> | OfficesSelect<true>;
     slider: SliderSelect<false> | SliderSelect<true>;
+    'service-areas': ServiceAreasSelect<false> | ServiceAreasSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -1042,6 +1044,41 @@ export interface Slider {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service-areas".
+ */
+export interface ServiceArea {
+  id: number;
+  areaName: string;
+  slug: string;
+  fullContent?: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  seoDetails?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+    metaKey?: string | null;
+    /**
+     * Paste valid JSON for structured data
+     */
+    seoStructuredData?: string | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1268,6 +1305,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'slider';
         value: number | Slider;
+      } | null)
+    | ({
+        relationTo: 'service-areas';
+        value: number | ServiceArea;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1851,6 +1892,25 @@ export interface SliderSelect<T extends boolean = true> {
         title?: T;
         subtitle?: T;
         position?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service-areas_select".
+ */
+export interface ServiceAreasSelect<T extends boolean = true> {
+  areaName?: T;
+  slug?: T;
+  fullContent?: T;
+  seoDetails?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+        metaKey?: T;
+        seoStructuredData?: T;
       };
   updatedAt?: T;
   createdAt?: T;

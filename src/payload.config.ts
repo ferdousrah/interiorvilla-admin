@@ -26,6 +26,7 @@ import BlogPosts from './collections/BlogPosts'
 import BlogCategories from './collections/BlogCategories'
 import Offices from './collections/Offices'
 import Slider from './collections/Slider'
+import ServiceArea from './collections/ServiceArea'
 
 import Home from './globals/Home'
 import About from './globals/About'
@@ -98,6 +99,7 @@ export default buildConfig({
     BlogCategories,
     Offices,
     Slider,
+    ServiceArea,
   ],
   cors: {
     origins: [
