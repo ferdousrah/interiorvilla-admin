@@ -1065,6 +1065,10 @@ export interface ServiceArea {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Paste Google Maps iframe embed code
+   */
+  googleEmbedCode?: string | null;
   seoDetails?: {
     metaTitle?: string | null;
     metaDescription?: string | null;
@@ -1904,6 +1908,7 @@ export interface ServiceAreasSelect<T extends boolean = true> {
   areaName?: T;
   slug?: T;
   fullContent?: T;
+  googleEmbedCode?: T;
   seoDetails?:
     | T
     | {

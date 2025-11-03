@@ -35,6 +35,14 @@ const ServiceArea: CollectionConfig = {
       }),
     },
     {
+      name: 'googleEmbedCode',
+      label: 'Google Map Embed Code',
+      type: 'textarea',
+      admin: {
+        description: 'Paste Google Maps iframe embed code',
+      },
+    },
+    {
       name: 'seoDetails',
       type: 'group',
       fields: [
